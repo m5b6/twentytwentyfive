@@ -61,15 +61,6 @@ export default function Home() {
       <style>{swirlAnimation}</style>
       <h1 style={sharedStyles.title}>2025: Habits</h1>
 
-      <HabitInput
-        newHabit={newHabit}
-        onHabitChange={setNewHabit}
-        chosenEmoji={chosenEmoji}
-        onEmojiPickerToggle={() => setPickerOpen(!pickerOpen)}
-        onColorPickerToggle={() => setColorPickerOpen(!colorPickerOpen)}
-        onAddHabit={addHabit}
-      />
-
       {pickerOpen && (
         <EmojiPicker
           emojis={EMOJIS}
@@ -87,6 +78,16 @@ export default function Home() {
           closePicker={() => setColorPickerOpen(false)}
         />
       )}
+
+      <HabitInput
+        newHabit={newHabit}
+        onHabitChange={setNewHabit}
+        chosenEmoji={chosenEmoji}
+        chosenColor={chosenColor === "auto" ? null : chosenColor}
+        onEmojiPickerToggle={() => setPickerOpen(!pickerOpen)}
+        onColorPickerToggle={() => setColorPickerOpen(!colorPickerOpen)}
+        onAddHabit={addHabit}
+      />
 
       {habits.map((h, i) => (
         <HabitChip

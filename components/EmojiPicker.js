@@ -10,44 +10,57 @@ export default function EmojiPicker({
   closePicker,
 }) {
   const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const pickerRef = useRef(null);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      closePicker();
+    }, 300); 
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (pickerRef.current && !pickerRef.current.contains(event.target)) {
-        closePicker();
+        handleClose();
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [closePicker]);
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
+  
 
   const containerStyle = {
     position: "absolute",
-    top: "3.5rem",
-    right: "2rem", 
+    left: "-1rem", 
     background: "#222",
     border: "1px solid #555",
-    borderRadius: "10px",
+    borderRadius: "12px",
     padding: "1rem",
     display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "0.8rem",
+    gridTemplateColumns: "repeat(5, 1fr)",
+    gap: "0.5rem",
     boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
     zIndex: 999,
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible ? "translateY(0)" : "translateY(-20px)",
-    transition: "all 0.2s ease-out",
+    opacity: isClosing ? 0 : (isVisible ? 1 : 0),
+    transform: isClosing 
+      ? "scale(0.3) translateY(-30px) translateX(30px)"
+      : (isVisible ? "scale(1) translateY(0) translateX(0)" : "scale(0.95) translateY(-20px)"),
+    transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+    transformOrigin: "top right",
+    minWidth: "240px",
   };
 
   const emojiStyle = {
-    fontSize: "1.6rem",
+    fontSize: "1.4rem",
     cursor: "pointer",
-    transition: "all 0.15s ease-out",
+    transition: "all 0.2s ease",
     width: "2.5rem",
     height: "2.5rem",
     display: "flex",
@@ -56,84 +69,51 @@ export default function EmojiPicker({
     borderRadius: "8px",
     background: "#333",
     userSelect: "none",
-    "&:hover": {
-      background: "#444",
-    }
+    border: "2px solid transparent",
   };
 
   const handleEmojiClick = (emoji, isRandom = false) => {
-    const el = document.createElement("div");
-    el.style.position = "fixed";
-    el.style.fontSize = "2rem";
-    el.style.pointerEvents = "none";
-    el.style.transition = "all 0.4s cubic-bezier(0.2, 0, 0, 1)";
-    el.textContent = isRandom ? "❓" : emoji;
-    document.body.appendChild(el);
-
-    // Get click position and final position (bottom-right of screen)
-    const rect = event.target.getBoundingClientRect();
-    const finalX = window.innerWidth - 20; // 20px from right
-    const finalY = window.innerHeight - 20; // 20px from bottom
-
-    // Set initial position
-    el.style.left = `${rect.left}px`;
-    el.style.top = `${rect.top}px`;
-    
-    requestAnimationFrame(() => {
-      // Create a curved animation effect
-      el.style.transform = `
-        translate(${finalX - rect.left}px, ${finalY - rect.top}px) 
-        scale(0.1) 
-        rotate(${Math.random() * 180 - 90}deg)
-      `;
-      el.style.opacity = "0";
-    });
-
-    // Cleanup
-    setTimeout(() => {
-      document.body.removeChild(el);
-      if (isRandom) {
-        onSelectRandom();
-      } else {
-        onSelect(emoji);
-      }
-      closePicker();
-    }, 500);
+    if (isRandom) {
+      onSelectRandom();
+    } else {
+      onSelect(emoji);
+    }
+    handleClose();
   };
 
   return (
     <div style={containerStyle} ref={pickerRef}>
+      <div
+        style={{...emojiStyle, background: "#444"}}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.1)";
+          e.currentTarget.style.borderColor = "#FFF";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.borderColor = "transparent";
+        }}
+        onClick={(e) => handleEmojiClick("❓", true)}
+      >
+        ❓
+      </div>
       {emojis.map((emoji) => (
         <div
           key={emoji}
           style={emojiStyle}
           onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.15)";
-            e.currentTarget.style.background = "#444";
+            e.currentTarget.style.transform = "scale(1.1)";
+            e.currentTarget.style.borderColor = "#FFF";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = "scale(1)";
-            e.currentTarget.style.background = "#333";
+            e.currentTarget.style.borderColor = "transparent";
           }}
           onClick={(e) => handleEmojiClick(emoji)}
         >
           {emoji}
         </div>
       ))}
-      <div
-        style={{...emojiStyle, background: "#444"}}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "scale(1.15)";
-          e.currentTarget.style.background = "#555";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "scale(1)";
-          e.currentTarget.style.background = "#444";
-        }}
-        onClick={(e) => handleEmojiClick("❓", true)}
-      >
-        ❓
-      </div>
     </div>
   );
 }
