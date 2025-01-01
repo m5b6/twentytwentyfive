@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
 import { swirlAnimation, sharedStyles } from "../styles";
-import { getRandomEmoji } from "../utils/emojiUtils";
-import { EMOJIS } from "../utils/emojiUtils";
-import { PRESET_COLORS, getRandomPastelColor } from "../utils/colorUtils";
 import EmojiPicker from "../components/EmojiPicker";
 import ColorPicker from "../components/ColorPicker";
 import HabitChip from "../components/HabitChip";
@@ -16,6 +13,70 @@ export default function Home() {
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [chosenEmoji, setChosenEmoji] = useState("random");
   const [chosenColor, setChosenColor] = useState("auto");
+  const getRandomPastelColor = () => {
+    const hue = Math.floor(Math.random() * 360);
+    const saturation = 50 + Math.random() * 20; // 50–70%
+    const lightness = 80 + Math.random() * 10; // 80–90%
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  };
+
+  const EMOJIS = [
+    "🏃",
+    "📚",
+    "✍️",
+    "🧘",
+    "💪",
+    "🎨",
+    "🎵",
+    "🌱",
+    "🧹",
+    "💧",
+    "🥗",
+    "😴",
+    "🚴",
+    "🧠",
+    "🎯",
+    "⌛",
+    "🤝",
+    "📝",
+    "🧘‍♀️",
+    "💻",
+    "🎮",
+    "🏊",
+    "🎪",
+    "💭",
+  ];
+
+  const getRandomEmoji = () => {
+    return EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+  };
+
+  const PRESET_COLORS = [
+    "#ffb3ba",
+    "#ffdfba",
+    "#ffffba",
+    "#baffc9",
+    "#bae1ff",
+    "#ffc0cb",
+    "#ffd700",
+    "#98fb98",
+    "#dabfff",
+    "#b19cd9",
+    "#f0e68c",
+    "#ffa07a",
+    "#f08080",
+    "#90ee90",
+    "#dcd0ff",
+    "#ffe4e1",
+    "#e0ffff",
+    "#ffdab9",
+    "#d3ffce",
+    "#ffb5c5",
+    "#c1ffc1",
+    "#b0e2ff",
+    "#ffcba4",
+    "#e6e6fa",
+  ];
 
   useEffect(() => {
     const saved = localStorage.getItem("habits");
@@ -60,7 +121,7 @@ export default function Home() {
   };
 
   const deleteHabit = (habitToDelete) => {
-    const updated = habits.filter(h => h.name !== habitToDelete.name);
+    const updated = habits.filter((h) => h.name !== habitToDelete.name);
     saveHabits(updated);
     // Also remove the saved position from localStorage
     localStorage.removeItem(`habit-pos-${habitToDelete.name}`);
