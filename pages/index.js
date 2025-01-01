@@ -58,6 +58,13 @@ export default function Home() {
     }
   };
 
+  const deleteHabit = (habitToDelete) => {
+    const updated = habits.filter(h => h.name !== habitToDelete.name);
+    saveHabits(updated);
+    // Also remove the saved position from localStorage
+    localStorage.removeItem(`habit-pos-${habitToDelete.name}`);
+  };
+
   return (
     <div style={sharedStyles.container} className="container">
       <style>{swirlAnimation}</style>
@@ -96,6 +103,7 @@ export default function Home() {
           habit={h}
           onIncrement={() => increment(i)}
           onRemove={() => decrement(i)}
+          onDelete={deleteHabit}
         />
       ))}
     </div>

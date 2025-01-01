@@ -12,7 +12,6 @@ const AnimatedContainer = styled.div`
   z-index: 998;
   min-width: 240px;
 
-  /* Animate in/out */
   opacity: ${(p) => (p.isClosing ? 0 : p.isVisible ? 1 : 0)};
   transform: ${(p) =>
     p.isClosing
