@@ -50,10 +50,12 @@ export default function Home() {
     saveHabits(updated);
   };
 
-  const removeHabit = (index) => {
+  const decrement = (index) => {
     const updated = [...habits];
-    updated.splice(index, 1);
-    saveHabits(updated);
+    if (updated[index].count > 0) {
+      updated[index].count--;
+      saveHabits(updated);
+    }
   };
 
   return (
@@ -94,7 +96,7 @@ export default function Home() {
           key={i}
           habit={h}
           onIncrement={() => increment(i)}
-          onRemove={() => removeHabit(i)}
+          onRemove={() => decrement(i)}
         />
       ))}
     </div>

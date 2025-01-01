@@ -8,6 +8,7 @@ export const swirlAnimation = `
 }
 `;
 
+
 export const sharedStyles = {
   container: {
     maxWidth: 800,
@@ -34,7 +35,7 @@ export const sharedStyles = {
     background: "#333",
     border: "1px solid #444",
     color: "#eee",
-    borderRadius: "5px",
+    borderRadius: "10px",
     width: "180px",
     marginLeft: "0.5rem",
 
@@ -45,10 +46,9 @@ export const sharedStyles = {
     background: "#333",
     border: "1px solid #666",
     color: "#eee",
-    borderRadius: "5px",
+    borderRadius: "10px",
     fontFamily: "monospace",
     transition: "background 0.3s",
-    marginLeft: "0.5rem",
   },
   swirl: {
     position: "relative",
@@ -79,8 +79,8 @@ export const sharedStyles = {
     borderRadius: "50%",
     background: "linear-gradient(135deg, #FF6B6B, #4ECDC4)",
     cursor: "pointer",
-    marginLeft: "0.5rem",
     transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+    
     boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1), 0 2px 8px rgba(0,0,0,0.2)",
     "&:before": {
       content: '""',

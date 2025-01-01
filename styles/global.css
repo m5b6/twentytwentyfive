@@ -31,3 +31,17 @@ h1 {
   margin: 1rem 0;
   text-align: center;
 }
+
+
+.spin {
+  transition: transform 0.3s ease-out;
+}
+
+.spin:hover {
+  transform: scale(1.2);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

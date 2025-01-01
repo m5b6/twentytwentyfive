@@ -20,7 +20,7 @@ export default function HabitInput({
       right: 0,
       bottom: 0,
       borderRadius: "50%",
-      background: chosenColor 
+      background: chosenColor
         ? `linear-gradient(135deg, ${chosenColor}, ${chosenColor})`
         : "linear-gradient(135deg, #FFE66D, #4ECDC4, #556270)",
       opacity: 0,
@@ -32,6 +32,7 @@ export default function HabitInput({
     <div style={sharedStyles.inputRow}>
       <div
         style={sharedStyles.swirl}
+        className="spin"
         onClick={onEmojiPickerToggle}
         onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.2)")}
         onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
@@ -42,6 +43,7 @@ export default function HabitInput({
       </div>
 
       <div
+        className="spin"
         style={colorPickerStyle}
         onClick={onColorPickerToggle}
         onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.2)")}
