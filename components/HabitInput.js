@@ -104,12 +104,13 @@ export default function HabitInput({
           fontSize: "0.7rem",
           color: "rgba(255,255,255,0.3)",
           zIndex: 10,
-          fontFamily: "monospace",
+          fontFamily: "inherit",
         }}
       >
-        (built by{" "}
+        (built very fast by{" "}
         <a
-          href="https://matiasberrios.com"
+          href="https://github.com/m5b6/twentytwentyfive/"
+          
           target="_blank"
           rel="noopener noreferrer"
           style={{

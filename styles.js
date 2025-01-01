@@ -14,7 +14,6 @@ export const sharedStyles = {
     maxWidth: 800,
     minHeight: "calc(100vh - 4rem)",
     margin: "2rem auto",
-    fontFamily: "monospace",
     background: "#1a1a1a",
     color: "#eee",
     padding: "1rem",
@@ -47,7 +46,6 @@ export const sharedStyles = {
     zIndex: 2,
   },
   textInput: {
-    fontFamily: "monospace",
     padding: "0.5rem",
     background: "#333",
     border: "1px solid #444",
@@ -68,7 +66,6 @@ export const sharedStyles = {
     border: "1px solid #666",
     color: "#eee",
     borderRadius: "10px",
-    fontFamily: "monospace",
     transition: "background 0.3s",
   },
   swirl: {
