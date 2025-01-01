@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-size: 16px;
 }
 html,
 body,
@@ -44,4 +45,12 @@ h1 {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+
+.textInput{
+  transition: all 0.15s ease-out;
+}
+.textInput:focus {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
 }

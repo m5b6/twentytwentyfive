@@ -38,7 +38,7 @@ export default function EmojiPicker({
 
   const containerStyle = {
     position: "absolute",
-    left: "-1rem", 
+    left: "-8rem", 
     background: "#222",
     border: "1px solid #555",
     borderRadius: "12px",
@@ -50,10 +50,10 @@ export default function EmojiPicker({
     zIndex: 999,
     opacity: isClosing ? 0 : (isVisible ? 1 : 0),
     transform: isClosing 
-      ? "scale(0.3) translateY(-30px) translateX(30px)"
-      : (isVisible ? "scale(1) translateY(0) translateX(0)" : "scale(0.95) translateY(-20px)"),
+      ? "scale(0.3) translateY(0) translateX(-30px)"
+      : (isVisible ? "scale(1) translateY(0) translateX(0)" : "scale(0.95) translateX(20px)"),
     transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-    transformOrigin: "top right",
+    transformOrigin: "center right",
     minWidth: "240px",
   };
 

@@ -52,6 +52,7 @@ export default function HabitInput({
 
       <input
         style={sharedStyles.textInput}
+        className="textInput"
         placeholder="Enter a habit"
         value={newHabit}
         onChange={(e) => onHabitChange(e.target.value)}

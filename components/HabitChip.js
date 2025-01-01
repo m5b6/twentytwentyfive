@@ -37,12 +37,8 @@ export default function HabitChip({ habit, onIncrement, onRemove, onDelete }) {
       
       if (mouseX >= trashRect.left && mouseX <= trashRect.right &&
           mouseY >= trashRect.top && mouseY <= trashRect.bottom) {
-        // Trigger deletion animation
-        setIsDeleting(true);
-        // Delete the habit after animation completes
-        setTimeout(() => {
-          onDelete(habit);
-        }, 300);
+        // Delete the habit
+        onDelete(habit);
         return;
       }
     }
@@ -83,12 +79,9 @@ export default function HabitChip({ habit, onIncrement, onRemove, onDelete }) {
     boxShadow: "0 3px 10px rgba(0,0,0,0.2)",
     minWidth: "200px",
     cursor: "grab",
-    opacity: isInitialRender ? 0 : (isDeleting ? 0 : 1),
-    transform: isInitialRender 
-      ? "scale(0.8) translateY(20px)" 
-      : (isDeleting ? "scale(0) rotate(10deg)" : "scale(1) translateY(0)"),
-    transition: "opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-    pointerEvents: isDeleting ? "none" : "auto",
+    opacity: isInitialRender ? 0 : 1,
+    transform: isInitialRender ? "scale(0.8) translateY(20px)" : "scale(1) translateY(0)",
+    transition: "opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
   };
 
   const contentStyle = {
