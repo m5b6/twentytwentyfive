@@ -5,6 +5,7 @@ export default function SelectionRect() {
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [rect, setRect] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [savedRects, setSavedRects] = useState([]);
+  const [deletingRects, setDeletingRects] = useState(new Set());
   const mouseDownTargetRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
@@ -104,9 +105,20 @@ export default function SelectionRect() {
   }, [isDrawing, rect, savedRects, isDragging]);
 
   const deleteRect = (index) => {
-    const newRects = savedRects.filter((_, i) => i !== index);
-    setSavedRects(newRects);
-    localStorage.setItem("selection-rects", JSON.stringify(newRects));
+    // Start the animation
+    setDeletingRects(prev => new Set([...prev, index]));
+    
+    // After animation completes, remove the rect
+    setTimeout(() => {
+      const newRects = savedRects.filter((_, i) => i !== index);
+      setSavedRects(newRects);
+      setDeletingRects(prev => {
+        const next = new Set(prev);
+        next.delete(index);
+        return next;
+      });
+      localStorage.setItem("selection-rects", JSON.stringify(newRects));
+    }, 150); // Faster animation duration
   };
 
   const updateRectName = (index, name) => {
@@ -168,7 +180,10 @@ export default function SelectionRect() {
               zIndex: 1,
               display: 'flex',
               flexDirection: 'column',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              opacity: deletingRects.has(index) ? 0 : 1,
+              transform: deletingRects.has(index) ? 'scale(0.9)' : 'scale(1)',
+              transition: deletingRects.has(index) ? 'all 0.15s ease-out' : 'none'
             }}
           >
             <div
@@ -182,7 +197,7 @@ export default function SelectionRect() {
                 borderTopRightRadius: '10px',
                 display: 'flex',
                 alignItems: 'center',
-                padding: '0 12px',
+                padding: '0 24px',
                 cursor: 'move',
                 userSelect: 'none'
               }}
@@ -197,7 +212,7 @@ export default function SelectionRect() {
                   color: 'white',
                   fontSize: '14px',
                   fontFamily: 'monospace',
-                  width: '100%',
+                  width: '80%',
                   outline: 'none'
                 }}
                 onClick={(e) => e.stopPropagation()}
@@ -225,14 +240,21 @@ export default function SelectionRect() {
               fontWeight: "bold",
               zIndex: 2,
               boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+              opacity: deletingRects.has(index) ? 0 : 1,
+              transform: deletingRects.has(index) ? 'scale(0.9)' : 'scale(1)',
+              transition: deletingRects.has(index) ? 'all 0.15s ease-out' : 'none'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.1)";
-              e.currentTarget.style.background = "#ff6666";
+              if (!deletingRects.has(index)) {
+                e.currentTarget.style.transform = "scale(1.1)";
+                e.currentTarget.style.background = "#ff6666";
+              }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.background = "#ff4444";
+              if (!deletingRects.has(index)) {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.background = "#ff4444";
+              }
             }}
           >
             ×
