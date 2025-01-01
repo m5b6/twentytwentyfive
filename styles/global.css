@@ -54,3 +54,10 @@ h1 {
 .textInput:focus {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
 }
+
+::placeholder {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

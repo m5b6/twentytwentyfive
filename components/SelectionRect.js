@@ -1,63 +1,59 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 export default function SelectionRect() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [rect, setRect] = useState({ x: 0, y: 0, width: 0, height: 0 });
-  const [isDraggingChip, setIsDraggingChip] = useState(false);
   const [savedRects, setSavedRects] = useState([]);
+  const isChipInteractionRef = useRef(false);
 
   useEffect(() => {
-    // Load saved rectangles from localStorage
     const saved = localStorage.getItem('selection-rects');
     if (saved) {
       setSavedRects(JSON.parse(saved));
     }
   }, []);
 
+  // Track chip interactions
   useEffect(() => {
-    const handleChipDragStart = (e) => {
+    const handleGlobalMouseDown = (e) => {
       if (e.target.closest('.habit-chip')) {
-        setIsDraggingChip(true);
-        setIsDrawing(false);
+        isChipInteractionRef.current = true;
       }
     };
-    
-    const handleChipDragEnd = () => {
+
+    const handleGlobalMouseUp = () => {
+      // Reset on next tick to ensure we don't start drawing immediately
       setTimeout(() => {
-        setIsDraggingChip(false);
-      }, 100); // Small delay to ensure drag is fully complete
+        isChipInteractionRef.current = false;
+      }, 0);
     };
 
-    window.addEventListener('dragstart', handleChipDragStart);
-    window.addEventListener('dragend', handleChipDragEnd);
-    window.addEventListener('drop', handleChipDragEnd);
+    window.addEventListener('mousedown', handleGlobalMouseDown, true);
+    window.addEventListener('mouseup', handleGlobalMouseUp, true);
     
     return () => {
-      window.removeEventListener('dragstart', handleChipDragStart);
-      window.removeEventListener('dragend', handleChipDragEnd);
-      window.removeEventListener('drop', handleChipDragEnd);
+      window.removeEventListener('mousedown', handleGlobalMouseDown, true);
+      window.removeEventListener('mouseup', handleGlobalMouseUp, true);
     };
   }, []);
 
   const handleMouseDown = useCallback((e) => {
-    // Don't start drawing if we're interacting with interactive elements
-    if (isDraggingChip || 
-        e.target.closest('input, button, .habit-chip, .emoji-picker, .color-picker, .delete-rect')) {
+    if (isChipInteractionRef.current || 
+        e.target.closest('input, button, .habit-chip, .emoji-picker, .color-picker, .delete-rect') ||
+        e.button !== 0) {
       return;
     }
-
-    if (e.button !== 0) return;
 
     const { clientX, clientY } = e;
     setIsDrawing(true);
     setStartPos({ x: clientX, y: clientY });
     setRect({ x: clientX, y: clientY, width: 0, height: 0 });
-  }, [isDraggingChip]);
+  }, []);
 
   const handleMouseMove = useCallback((e) => {
-    if (!isDrawing || isDraggingChip) {
-      if (isDraggingChip) setIsDrawing(false);
+    if (!isDrawing || isChipInteractionRef.current) {
+      setIsDrawing(false);
       return;
     }
 
@@ -68,10 +64,10 @@ export default function SelectionRect() {
       width: Math.abs(clientX - startPos.x),
       height: Math.abs(clientY - startPos.y),
     });
-  }, [isDrawing, startPos, isDraggingChip]);
+  }, [isDrawing, startPos]);
 
   const handleMouseUp = useCallback(() => {
-    if (isDrawing && rect.width >= 100 && rect.height >= 100) {
+    if (isDrawing && rect.width >= 100 && rect.height >= 100 && !isChipInteractionRef.current) {
       const newRects = [...savedRects, rect];
       setSavedRects(newRects);
       localStorage.setItem('selection-rects', JSON.stringify(newRects));
@@ -109,8 +105,8 @@ export default function SelectionRect() {
 
   return (
     <>
-      {/* Currently drawing rectangle */}
-      {isDrawing && !isDraggingChip && (
+      {/* Only show drawing rectangle if we're not interacting with a chip */}
+      {isDrawing && !isChipInteractionRef.current && (
         <div
           style={{
             position: 'fixed',
@@ -120,7 +116,7 @@ export default function SelectionRect() {
             height: rect.height,
             ...rectStyle,
             pointerEvents: 'none',
-            zIndex: 9999,
+            zIndex: 1,
           }}
         />
       )}
@@ -136,7 +132,7 @@ export default function SelectionRect() {
               width: savedRect.width,
               height: savedRect.height,
               ...rectStyle,
-              zIndex: 998,
+              zIndex: 1,
             }}
           />
           <button
@@ -158,7 +154,7 @@ export default function SelectionRect() {
               justifyContent: 'center',
               fontSize: '14px',
               fontWeight: 'bold',
-              zIndex: 999,
+              zIndex: 2,
               boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
               transition: 'all 0.2s ease',
             }}

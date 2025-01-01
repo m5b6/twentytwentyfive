@@ -12,6 +12,7 @@ export default function HabitInput({
   const colorPickerStyle = {
     ...sharedStyles.swirlColor,
     background: chosenColor || "linear-gradient(135deg, #FF6B6B, #4ECDC4)",
+    userSelect: "none",
     "&:before": {
       content: '""',
       position: "absolute",
@@ -31,13 +32,16 @@ export default function HabitInput({
   return (
     <div style={sharedStyles.inputRow} className="inputRow">
       <div
-        style={sharedStyles.swirl}
+        style={{
+          ...sharedStyles.swirl,
+          userSelect: "none",
+        }}
         className="spin"
         onClick={onEmojiPickerToggle}
         onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.2)")}
         onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
       >
-        <span style={{ fontSize: "1.2rem" }}>
+        <span style={{ fontSize: "1.2rem", userSelect: "none" }}>
           {chosenEmoji === "random" ? "❓" : chosenEmoji}
         </span>
       </div>
@@ -51,7 +55,12 @@ export default function HabitInput({
       />
 
       <input
-        style={sharedStyles.textInput}
+        style={{
+          ...sharedStyles.textInput,
+          "::placeholder": {
+            userSelect: "none",
+          },
+        }}
         className="textInput"
         placeholder="Enter a habit"
         value={newHabit}
@@ -59,7 +68,10 @@ export default function HabitInput({
       />
 
       <button
-        style={sharedStyles.addButton}
+        style={{
+          ...sharedStyles.addButton,
+          userSelect: "none",
+        }}
         onMouseEnter={(e) => (e.currentTarget.style.background = "#555")}
         onMouseLeave={(e) => (e.currentTarget.style.background = "#333")}
         onClick={onAddHabit}

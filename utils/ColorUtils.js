@@ -20,7 +20,6 @@ export const PRESET_COLORS = [
   "#ffa07a", // Light salmon
   "#f08080", // Light coral
   "#90ee90", // Light green
-  // Added 10 new colors:
   "#dcd0ff", // Pale lavender
   "#ffe4e1", // Misty rose
   "#e0ffff", // Light cyan
