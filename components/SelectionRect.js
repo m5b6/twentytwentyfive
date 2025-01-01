@@ -6,6 +6,9 @@ export default function SelectionRect() {
   const [rect, setRect] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [savedRects, setSavedRects] = useState([]);
   const mouseDownTargetRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
+  const [dragRectIndex, setDragRectIndex] = useState(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("selection-rects");
@@ -15,7 +18,6 @@ export default function SelectionRect() {
   }, []);
 
   const handleMouseDown = useCallback((e) => {
-    // Store the element that was clicked
     mouseDownTargetRef.current = e.target;
 
     if (
@@ -24,22 +26,42 @@ export default function SelectionRect() {
       ) ||
       e.button !== 0
     ) {
-      console.log("mouse down target", e.target);
       return;
     }
-    else{
-        console.log("mouse down targetqwdwqdwqd", e.target);
+
+    // Check if clicking on a rect's top bar
+    const rectTopBar = e.target.closest('.rect-top-bar');
+    if (rectTopBar) {
+      const index = parseInt(rectTopBar.dataset.index);
+      setIsDragging(true);
+      setDragRectIndex(index);
+      setDragStartPos({
+        x: e.clientX - savedRects[index].x,
+        y: e.clientY - savedRects[index].y
+      });
+      return;
     }
 
     const { clientX, clientY } = e;
     setIsDrawing(true);
     setStartPos({ x: clientX, y: clientY });
     setRect({ x: clientX, y: clientY, width: 0, height: 0 });
-  }, []);
+  }, [savedRects]);
 
   const handleMouseMove = useCallback(
     (e) => {
-      // If we started on a chip, don't draw
+      if (isDragging && dragRectIndex !== null) {
+        const newRects = [...savedRects];
+        newRects[dragRectIndex] = {
+          ...newRects[dragRectIndex],
+          x: e.clientX - dragStartPos.x,
+          y: e.clientY - dragStartPos.y
+        };
+        setSavedRects(newRects);
+        localStorage.setItem("selection-rects", JSON.stringify(newRects));
+        return;
+      }
+
       if (!isDrawing || mouseDownTargetRef.current?.closest(".habit-chip")) {
         setIsDrawing(false);
         return;
@@ -53,27 +75,43 @@ export default function SelectionRect() {
         height: Math.abs(clientY - startPos.y),
       });
     },
-    [isDrawing, startPos]
+    [isDrawing, startPos, isDragging, dragRectIndex, dragStartPos, savedRects]
   );
 
   const handleMouseUp = useCallback(() => {
-    // Only save if we didn't start on a chip and meet size requirements
+    if (isDragging) {
+      setIsDragging(false);
+      setDragRectIndex(null);
+      return;
+    }
+
     if (
       isDrawing &&
       rect.width >= 100 &&
       rect.height >= 100 &&
       !mouseDownTargetRef.current?.closest(".habit-chip")
     ) {
-      const newRects = [...savedRects, rect];
+      const newRect = {
+        ...rect,
+        name: `Window ${savedRects.length + 1}`
+      };
+      const newRects = [...savedRects, newRect];
       setSavedRects(newRects);
       localStorage.setItem("selection-rects", JSON.stringify(newRects));
     }
     setIsDrawing(false);
     mouseDownTargetRef.current = null;
-  }, [isDrawing, rect, savedRects]);
+  }, [isDrawing, rect, savedRects, isDragging]);
 
   const deleteRect = (index) => {
     const newRects = savedRects.filter((_, i) => i !== index);
+    setSavedRects(newRects);
+    localStorage.setItem("selection-rects", JSON.stringify(newRects));
+  };
+
+  const updateRectName = (index, name) => {
+    const newRects = [...savedRects];
+    newRects[index] = { ...newRects[index], name };
     setSavedRects(newRects);
     localStorage.setItem("selection-rects", JSON.stringify(newRects));
   };
@@ -98,12 +136,10 @@ export default function SelectionRect() {
     WebkitBackdropFilter: "blur(4px)",
     boxShadow:
       "0 0 0 1px rgba(255, 255, 255, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.2)",
-    transition: "all 0.2s ease",
   };
 
   return (
     <>
-      {/* Only show drawing rectangle if we didn't start on a chip */}
       {isDrawing && !mouseDownTargetRef.current?.closest(".habit-chip") && (
         <div
           style={{
@@ -119,7 +155,6 @@ export default function SelectionRect() {
         />
       )}
 
-      {/* Saved rectangles */}
       {savedRects.map((savedRect, index) => (
         <div key={index} style={{ position: "relative" }}>
           <div
@@ -131,8 +166,44 @@ export default function SelectionRect() {
               height: savedRect.height,
               ...rectStyle,
               zIndex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden'
             }}
-          />
+          >
+            <div
+              className="rect-top-bar"
+              data-index={index}
+              style={{
+                height: '32px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+                borderTopLeftRadius: '10px',
+                borderTopRightRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0 12px',
+                cursor: 'move',
+                userSelect: 'none'
+              }}
+            >
+              <input
+                type="text"
+                value={savedRect.name || ''}
+                onChange={(e) => updateRectName(index, e.target.value)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'white',
+                  fontSize: '14px',
+                  fontFamily: 'monospace',
+                  width: '100%',
+                  outline: 'none'
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </div>
           <button
             className="delete-rect"
             onClick={() => deleteRect(index)}
@@ -154,7 +225,6 @@ export default function SelectionRect() {
               fontWeight: "bold",
               zIndex: 2,
               boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-              transition: "all 0.2s ease",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "scale(1.1)";

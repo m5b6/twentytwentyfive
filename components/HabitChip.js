@@ -69,7 +69,7 @@ export default function HabitChip({ habit, onIncrement, onRemove, onDelete }) {
   };
 
   const containerStyle = {
-    position: "absolute", // important for Draggable
+    position: "fixed", // important for Draggable
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
