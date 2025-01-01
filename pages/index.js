@@ -7,6 +7,7 @@ import EmojiPicker from "../components/EmojiPicker";
 import ColorPicker from "../components/ColorPicker";
 import HabitChip from "../components/HabitChip";
 import HabitInput from "../components/HabitInput";
+import SelectionRect from "../components/SelectionRect";
 
 export default function Home() {
   const [habits, setHabits] = useState([]);
@@ -68,6 +69,7 @@ export default function Home() {
   return (
     <div style={sharedStyles.container} className="container">
       <style>{swirlAnimation}</style>
+      <SelectionRect />
 
       {pickerOpen && (
         <EmojiPicker
