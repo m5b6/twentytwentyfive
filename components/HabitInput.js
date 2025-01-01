@@ -29,7 +29,7 @@ export default function HabitInput({
   };
 
   return (
-    <div style={sharedStyles.inputRow}>
+    <div style={sharedStyles.inputRow} className="inputRow">
       <div
         style={sharedStyles.swirl}
         className="spin"

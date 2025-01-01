@@ -61,7 +61,6 @@ export default function Home() {
   return (
     <div style={sharedStyles.container} className="container">
       <style>{swirlAnimation}</style>
-      <h1 style={sharedStyles.title}>2025: Habits</h1>
 
       {pickerOpen && (
         <EmojiPicker
