@@ -21,7 +21,7 @@ export function initSpinAnimation() {
       // Animate to 0 degrees
       const currentRotation = rotation;
       const startTime = performance.now();
-      const duration = 300; // 300ms
+      const duration = 100; // 300ms
       
       function smoothRotateToZero(currentTime) {
         const elapsed = currentTime - startTime;

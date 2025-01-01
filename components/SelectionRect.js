@@ -122,6 +122,9 @@ export default function SelectionRect() {
   };
 
   const updateRectName = (index, name) => {
+    // Prevent empty names
+    if (!name.trim()) return;
+    
     const newRects = [...savedRects];
     newRects[index] = { ...newRects[index], name };
     setSavedRects(newRects);
@@ -197,7 +200,8 @@ export default function SelectionRect() {
                 borderTopRightRadius: '10px',
                 display: 'flex',
                 alignItems: 'center',
-                padding: '0 24px',
+                justifyContent: 'space-between',
+                padding: '0 12px',
                 cursor: 'move',
                 userSelect: 'none'
               }}
@@ -212,53 +216,59 @@ export default function SelectionRect() {
                   color: 'white',
                   fontSize: '14px',
                   fontFamily: 'monospace',
-                  width: '80%',
-                  outline: 'none'
+                  width: 'min-content',
+                  minWidth: '10px',
+                  outline: 'none',
+                  padding: '2px 4px',
+                  borderRadius: '4px',
+                  transition: 'background-color 0.15s ease-out'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
                 }}
                 onClick={(e) => e.stopPropagation()}
               />
+              <button
+                className="delete-rect"
+                onClick={() => deleteRect(index)}
+                style={{
+                  width: "18px",
+                  height: "18px",
+                  background: 'transparent',
+                  border: 'none',
+                  borderRadius: "50%",
+                  color: "rgba(255, 255, 255, 0.6)",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  marginLeft: '8px',
+                  opacity: deletingRects.has(index) ? 0 : 1,
+                  transform: deletingRects.has(index) ? 'scale(0.9)' : 'scale(1)',
+                  transition: deletingRects.has(index) ? 'all 0.15s ease-out' : 'none'
+                }}
+                onMouseEnter={(e) => {
+                  if (!deletingRects.has(index)) {
+                    e.currentTarget.style.transform = "scale(1.1)";
+                    e.currentTarget.style.color = "rgba(255, 255, 255, 0.9)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!deletingRects.has(index)) {
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.color = "rgba(255, 255, 255, 0.6)";
+                  }
+                }}
+              >
+                ×
+              </button>
             </div>
           </div>
-          <button
-            className="delete-rect"
-            onClick={() => deleteRect(index)}
-            style={{
-              position: "fixed",
-              left: savedRect.x + savedRect.width - 24,
-              top: savedRect.y - 12,
-              width: "24px",
-              height: "24px",
-              background: "#ff4444",
-              border: "none",
-              borderRadius: "50%",
-              color: "white",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "14px",
-              fontWeight: "bold",
-              zIndex: 2,
-              boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-              opacity: deletingRects.has(index) ? 0 : 1,
-              transform: deletingRects.has(index) ? 'scale(0.9)' : 'scale(1)',
-              transition: deletingRects.has(index) ? 'all 0.15s ease-out' : 'none'
-            }}
-            onMouseEnter={(e) => {
-              if (!deletingRects.has(index)) {
-                e.currentTarget.style.transform = "scale(1.1)";
-                e.currentTarget.style.background = "#ff6666";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!deletingRects.has(index)) {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.background = "#ff4444";
-              }
-            }}
-          >
-            ×
-          </button>
         </div>
       ))}
     </>

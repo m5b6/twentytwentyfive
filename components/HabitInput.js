@@ -1,4 +1,5 @@
 import { sharedStyles } from "../styles";
+import { Tooltip } from "@mui/material";
 
 export default function HabitInput({
   newHabit,
@@ -31,28 +32,56 @@ export default function HabitInput({
 
   return (
     <div style={sharedStyles.inputRow} className="inputRow">
-      <div
-        style={{
-          ...sharedStyles.swirl,
-          userSelect: "none",
+      <Tooltip 
+        title="choose icon" 
+        placement="top"
+        componentsProps={{
+          tooltip: {
+            sx: {
+              bgcolor: 'black',
+              color: 'white',
+              fontSize: '0.875rem'
+            }
+          }
         }}
-        className="spin"
-        onClick={onEmojiPickerToggle}
-        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.2)")}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
       >
-        <span style={{ fontSize: "1.2rem", userSelect: "none" }}>
-          {chosenEmoji === "random" ? "❓" : chosenEmoji}
-        </span>
-      </div>
+        <div
+          style={{
+            ...sharedStyles.swirl,
+            userSelect: "none",
+          }}
+          className="spin"
+          onClick={onEmojiPickerToggle}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.2)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+          <span style={{ fontSize: "1.2rem", userSelect: "none" }}>
+            {chosenEmoji === "random" ? "❓" : chosenEmoji}
+          </span>
+        </div>
+      </Tooltip>
 
-      <div
-        className="spin"
-        style={colorPickerStyle}
-        onClick={onColorPickerToggle}
-        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.2)")}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      />
+      <Tooltip 
+        title="choose color" 
+        placement="top"
+        componentsProps={{
+          tooltip: {
+            sx: {
+              bgcolor: 'black',
+              color: 'white',
+              fontSize: '0.875rem'
+            }
+          }
+        }}
+      >
+        <div
+          className="spin"
+          style={colorPickerStyle}
+          onClick={onColorPickerToggle}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.2)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        />
+      </Tooltip>
 
       <input
         style={{
@@ -67,17 +96,31 @@ export default function HabitInput({
         onChange={(e) => onHabitChange(e.target.value)}
       />
 
-      <button
-        style={{
-          ...sharedStyles.addButton,
-          userSelect: "none",
+      <Tooltip 
+        title="add habit" 
+        placement="top"
+        componentsProps={{
+          tooltip: {
+            sx: {
+              bgcolor: 'black',
+              color: 'white',
+              fontSize: '0.875rem'
+            }
+          }
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = "#555")}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "#333")}
-        onClick={onAddHabit}
       >
-        +
-      </button>
+        <button
+          style={{
+            ...sharedStyles.addButton,
+            userSelect: "none",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "#555")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "#333")}
+          onClick={onAddHabit}
+        >
+          +
+        </button>
+      </Tooltip>
     </div>
   );
 }

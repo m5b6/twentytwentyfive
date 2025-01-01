@@ -94,13 +94,12 @@ export default function HabitChip({ habit, onIncrement, onRemove, onDelete }) {
 
   const btnStyle = (isBouncing) => ({
     cursor: "pointer",
-    background: "rgba(255,255,255,0.5)",
+    background: "rgba(255,255,255,0.3)",
     border: "none",
     borderRadius: "50%",
     width: "2rem",
     height: "2rem",
-    fontSize: "1.2rem",
-    fontWeight: "bold",
+    fontSize: "1rem",
     transition: "transform 0.1s",
     transform: isBouncing ? "scale(0.9)" : "scale(1)",
   });
