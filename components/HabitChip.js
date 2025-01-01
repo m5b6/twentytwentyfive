@@ -151,23 +151,24 @@ export default function HabitChip({ habit, onIncrement, onRemove, onDelete }) {
       <Draggable 
         nodeRef={nodeRef} 
         defaultPosition={defaultPos} 
+        className="habit-chip"
         bounds="body"
         onStart={handleDragStart}
         onStop={handleDragStop}
         onDrag={handleDrag}
       >
-        <div ref={nodeRef} style={{...containerStyle, zIndex: 200}}>
-          <button style={btnStyle(isBouncingMinus)} onClick={handleDecrement}>
+        <div ref={nodeRef} style={{...containerStyle, zIndex: 200}} className="habit-chip-container">
+          <button style={btnStyle(isBouncingMinus)} onClick={handleDecrement} className="habit-minus-btn">
             −
           </button>
-          <div style={contentStyle}>
-            <span>{habit.emoji}</span>
-            <span>{habit.name}</span>
-            <span>
+          <div style={contentStyle} className="habit-content">
+            <span className="habit-emoji">{habit.emoji}</span>
+            <span className="habit-name">{habit.name}</span>
+            <span className="habit-count">
               <strong>{habit.count}</strong>
             </span>
           </div>
-          <button style={btnStyle(isBouncingPlus)} onClick={handleIncrement}>
+          <button style={btnStyle(isBouncingPlus)} onClick={handleIncrement} className="habit-plus-btn">
             +
           </button>
         </div>
