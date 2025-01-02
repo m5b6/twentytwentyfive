@@ -37,7 +37,7 @@ export default function SuffixPicker({ onSelect, selectedSuffix }) {
 
   const getFilteredOptions = () => {
     if (!selectedCategory) return [];
-    return SUFFIXES[selectedCategory].options.filter(option =>
+    return SUFFIXES[selectedCategory].options.filter((option) =>
       option.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
@@ -53,7 +53,7 @@ export default function SuffixPicker({ onSelect, selectedSuffix }) {
     boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
     backdropFilter: "blur(10px)",
     zIndex: 1000,
-    minWidth: "200px",
+    minWidth: "400px",
     opacity: isOpen ? 1 : 0,
     transform: isOpen ? "translateY(0)" : "translateY(-10px)",
     pointerEvents: isOpen ? "auto" : "none",
@@ -74,7 +74,15 @@ export default function SuffixPicker({ onSelect, selectedSuffix }) {
     "&:focus": {
       background: "rgba(255,255,255,0.15)",
       borderColor: "rgba(255,255,255,0.3)",
-    }
+    },
+  };
+
+  const gridStyle = {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "8px",
+    maxHeight: "400px",
+    overflowY: "auto",
   };
 
   const categoryStyle = {
@@ -104,46 +112,58 @@ export default function SuffixPicker({ onSelect, selectedSuffix }) {
     },
   };
 
+  const labelIconStyle = {
+    fontSize: "14px",
+    fontWeight: "bold",
+    opacity: 0.7,
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "2px",
+  };
+
   return (
-    <div style={{ position: "relative" }} ref={dropdownRef}>
-      <Tooltip
-        title="add suffix"
-        placement="top"
-        componentsProps={{
-          tooltip: {
-            sx: {
-              bgcolor: "black",
-              color: "white",
-              fontSize: "0.875rem",
-            },
+    <div style={{ position: "relative", height: "100%" }} ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          background: "transparent",
+          border: "none",
+          borderLeft: "1px solid rgba(255,255,255,0.2)",
+          borderRadius: "0",
+          padding: "6px 12px",
+          height: "100%",
+          color: "rgba(255,255,255,0.6)",
+          cursor: "pointer",
+          transition: "all 0.2s ease",
+          display: "flex",
+          alignItems: "center",
+          gap: "4px",
+          fontSize: "14px",
+          "&:hover": {
+            color: "#fff",
+            background: "rgba(255,255,255,0.1)",
           },
         }}
       >
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          style={{
-            background: "rgba(255,255,255,0.08)",
-            border: "none",
-            borderRadius: "10px",
-            padding: "8px 12px",
-            color: "#fff",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-            backdropFilter: "blur(8px)",
-            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1)",
-            minWidth: "80px",
-            textAlign: "center",
-            "&:hover": {
-              background: "rgba(255,255,255,0.12)",
-              transform: "translateY(-1px)",
-            },
-          }}
-        >
-          {selectedSuffix || "suffix"}
-        </button>
-      </Tooltip>
+        <span style={{ opacity: 0.7 }}>%</span>
+      </button>
 
-      <div style={dropdownStyle}>
+      <div style={{
+        position: "absolute",
+        top: "calc(100% + 8px)",
+        right: 0,
+        background: "rgba(0,0,0,0.9)",
+        borderRadius: "12px",
+        padding: "8px",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+        backdropFilter: "blur(10px)",
+        zIndex: 1000,
+        minWidth: "400px",
+        opacity: isOpen ? 1 : 0,
+        transform: isOpen ? "translateY(0)" : "translateY(-10px)",
+        pointerEvents: isOpen ? "auto" : "none",
+        transition: "all 0.2s ease-out",
+      }}>
         {selectedCategory ? (
           <>
             <div
@@ -197,8 +217,8 @@ export default function SuffixPicker({ onSelect, selectedSuffix }) {
               }}
             />
 
-            <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-              {getFilteredOptions().map((option) => (
+            <div style={gridStyle}>
+              {getFilteredOptions().map((option, index) => (
                 <div
                   key={option}
                   style={optionStyle}
@@ -216,33 +236,42 @@ export default function SuffixPicker({ onSelect, selectedSuffix }) {
                 </div>
               ))}
               {getFilteredOptions().length === 0 && (
-                <div style={{ padding: "8px 12px", color: "rgba(255,255,255,0.5)", textAlign: "center" }}>
+                <div
+                  style={{
+                    padding: "8px 12px",
+                    color: "rgba(255,255,255,0.5)",
+                    textAlign: "center",
+                    gridColumn: "1 / -1",
+                  }}
+                >
                   No matches found
                 </div>
               )}
             </div>
           </>
         ) : (
-          Object.entries(SUFFIXES).map(([key, { label }]) => (
-            <div
-              key={key}
-              style={categoryStyle}
-              onClick={() => setSelectedCategory(key)}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.1)";
-                e.currentTarget.style.transform = "translateX(5px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.transform = "translateX(0)";
-              }}
-            >
-              {label}
-              <span style={{ color: "rgba(255,255,255,0.4)" }}>→</span>
-            </div>
-          ))
+          <div style={gridStyle}>
+            {Object.entries(SUFFIXES).map(([key, { label }]) => (
+              <div
+                key={key}
+                style={categoryStyle}
+                onClick={() => setSelectedCategory(key)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                  e.currentTarget.style.transform = "translateX(5px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.transform = "translateX(0)";
+                }}
+              >
+                {label}
+                <span style={{ color: "rgba(255,255,255,0.4)" }}>→</span>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
   );
-} 
+}

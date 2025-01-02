@@ -2,6 +2,7 @@ import { sharedStyles } from "../styles";
 import { Tooltip } from "@mui/material";
 import { useState, useEffect } from "react";
 import SuffixPicker from "./SuffixPicker";
+import { EMOJIS } from "../utils/EmojiUtils";
 
 export default function HabitInput({
   newHabit,
@@ -17,6 +18,30 @@ export default function HabitInput({
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [isMac, setIsMac] = useState(false);
   const [selectedSuffix, setSelectedSuffix] = useState("");
+  const [randomEmoji, setRandomEmoji] = useState("❓");
+  const [isEmojiAnimating, setIsEmojiAnimating] = useState(false);
+
+  // Periodic emoji change
+  useEffect(() => {
+    if (chosenEmoji !== "random") return;
+
+    const interval = setInterval(() => {
+      setIsEmojiAnimating(true);
+      
+      // After scale down, change emoji
+      setTimeout(() => {
+        const newEmoji = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+        setRandomEmoji(newEmoji);
+      }, 150); // Half of the animation duration
+
+      // After changing emoji, scale back up
+      setTimeout(() => {
+        setIsEmojiAnimating(false);
+      }, 300);
+    }, 2000); // Change every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [chosenEmoji]);
 
   useEffect(() => {
     const saved = localStorage.getItem("habits");
@@ -79,7 +104,8 @@ export default function HabitInput({
 
   const colorPickerStyle = {
     ...sharedStyles.swirlColor,
-    background: chosenColor || "linear-gradient(135deg, #FF6B6B, #4ECDC4)",
+    background: chosenColor || "conic-gradient(from 0deg at 50% 50%, #ff0000, #ff9900, #ffff00, #33cc33, #3399ff, #9933ff, #ff0000)",
+    backdropFilter: "blur(4px)",
     userSelect: "none",
     "&:before": {
       content: '""',
@@ -91,7 +117,7 @@ export default function HabitInput({
       borderRadius: "50%",
       background: chosenColor
         ? `linear-gradient(135deg, ${chosenColor}, ${chosenColor})`
-        : "linear-gradient(135deg, #FFE66D, #4ECDC4, #556270)",
+        : "conic-gradient(from 0deg at 50% 50%, #ff0000, #ff9900, #ffff00, #33cc33, #3399ff, #9933ff, #ff3399, #ff0000)",
       opacity: 0,
       transition: "opacity 0.4s ease",
     },
@@ -132,7 +158,7 @@ export default function HabitInput({
       <div
         style={{
           position: "fixed",
-          top: "20px",
+          bottom: "20px",
           left: "20px",
           transform: `translateY(${showRectangleHint ? "0" : "-20px"})`,
           opacity: showRectangleHint ? 0.8 : 0,
@@ -163,14 +189,17 @@ export default function HabitInput({
       >
         <div
           style={{
-            position: "relative",
+            position: "absolute",
+            bottom: "4em",
+            color: "rgba(255,255,255,0.5) !important",
+            fontSize: "0.9rem",
+            fontStyle: "italic",
             marginBottom: "30px",
             transform: `translateY(${showTitle ? "0" : "-20px"})`,
             opacity: showTitle ? 1 : 0,
             transition: isFirstRender ? "none" : "all 0.3s ease-out",
             textAlign: "center",
             fontSize: "1.1rem",
-            color: "#fff",
             pointerEvents: showTitle ? "auto" : "none",
             zIndex: 10,
             textShadow: "0 2px 4px rgba(0,0,0,0.2)",
@@ -207,8 +236,17 @@ export default function HabitInput({
                 (e.currentTarget.style.transform = "scale(1)")
               }
             >
-              <span style={{ fontSize: "1.2rem", userSelect: "none" }}>
-                {chosenEmoji === "random" ? "❓" : chosenEmoji}
+              <span 
+                style={{ 
+                  fontSize: "1.2rem", 
+                  userSelect: "none",
+                  transition: "all 0.3s ease",
+                  transform: isEmojiAnimating ? "scale(0)" : "scale(1)",
+                  opacity: isEmojiAnimating ? 0 : 1,
+                  display: "inline-block",
+                }}
+              >
+                {chosenEmoji === "random" ? randomEmoji : chosenEmoji}
               </span>
             </div>
           </Tooltip>
@@ -227,7 +265,7 @@ export default function HabitInput({
             }}
           >
             <div
-              className="spin"
+              className="spin rainbow"
               style={colorPickerStyle}
               onClick={onColorPickerToggle}
               onMouseEnter={(e) =>
@@ -239,24 +277,57 @@ export default function HabitInput({
             />
           </Tooltip>
 
-          <input
-            style={{
-              ...sharedStyles.textInput,
-              "::placeholder": {
+          <div 
+          className="habit-input-container"
+          style={{
+            position: "relative",
+            flex: 1,
+            display: "flex",
+            alignItems: "stretch",
+          }}>
+            <input
+              style={{
+                ...sharedStyles.textInput,
+                width: "100%",
+                paddingRight: selectedSuffix ? "80px" : "50px",
+                "::placeholder": {
+                  userSelect: "none",
+                },
+              }}
+              className="textInput"
+              placeholder="Enter a habit"
+              value={newHabit}
+              onChange={(e) => onHabitChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            {selectedSuffix && (
+              <div style={{
+                position: "absolute",
+                right: "45px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "rgba(255,255,255,0.5)",
+                pointerEvents: "none",
+                fontSize: "0.9rem",
                 userSelect: "none",
-              },
-            }}
-            className="textInput"
-            placeholder="Enter a habit"
-            value={newHabit}
-            onChange={(e) => onHabitChange(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-
-          <SuffixPicker
-            selectedSuffix={selectedSuffix}
-            onSelect={setSelectedSuffix}
-          />
+              }}>
+                {selectedSuffix}
+              </div>
+            )}
+            <div style={{
+              position: "absolute",
+              right: 0,
+              top: 0,
+              bottom: 0,
+              display: "flex",
+              alignItems: "stretch",
+            }}>
+              <SuffixPicker
+                selectedSuffix={selectedSuffix}
+                onSelect={setSelectedSuffix}
+              />
+            </div>
+          </div>
 
           <Tooltip
             title={`add habit [${isMac ? "⌘" : "Ctrl"} + ↵]`}

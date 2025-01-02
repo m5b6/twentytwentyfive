@@ -38,7 +38,7 @@ export default function EmojiPicker({
 
   const containerStyle = {
     position: "absolute",
-    left: "-8rem", 
+    left: "-6rem", 
     background: "#222",
     border: "1px solid #555",
     borderRadius: "12px",

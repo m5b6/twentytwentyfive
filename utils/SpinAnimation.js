@@ -6,7 +6,7 @@ export function initSpinAnimation() {
     let animationFrameId;
     
     function updateSpin() {
-      rotation = (rotation + 2) % 360;
+      rotation += 2;  // Remove the modulo, let it grow continuously
       element.style.transform = `rotate(${rotation}deg)`;
       animationFrameId = requestAnimationFrame(updateSpin);
     }
@@ -18,31 +18,33 @@ export function initSpinAnimation() {
       // Stop the continuous spin
       cancelAnimationFrame(animationFrameId);
       
-      // Animate to 0 degrees
-      const currentRotation = rotation;
+      // Animate to nearest 360 multiple
+      const targetRotation = Math.ceil(rotation / 360) * 360;
       const startTime = performance.now();
-      const duration = 100; // 300ms
+      const duration = 100;
       
-      function smoothRotateToZero(currentTime) {
+      function smoothRotateToTarget(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         
         // Ease out function
         const easeProgress = 1 - Math.pow(1 - progress, 3);
         
-        const currentDegrees = currentRotation + (0 - currentRotation) * easeProgress;
+        const currentDegrees = rotation + (targetRotation - rotation) * easeProgress;
         element.style.transform = `rotate(${currentDegrees}deg) scale(1.2)`;
         
         if (progress < 1) {
-          requestAnimationFrame(smoothRotateToZero);
+          requestAnimationFrame(smoothRotateToTarget);
+        } else {
+          rotation = targetRotation;  // Update the rotation to match where we ended
         }
       }
       
-      requestAnimationFrame(smoothRotateToZero);
+      requestAnimationFrame(smoothRotateToTarget);
     });
     
     element.addEventListener('mouseleave', () => {
-      // Reset scale and restart continuous spin
+      // Reset scale and restart continuous spin from current rotation
       element.style.transform = `rotate(${rotation}deg)`;
       updateSpin();
     });

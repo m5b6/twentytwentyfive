@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const AnimatedContainer = styled.div`
   position: absolute;
-  left: -8rem;
+  left: -6rem;
   background: ${(p) => (p.theme === "dark" ? "#2A2A2A" : "#FFFFFF")};
   border: 1px solid ${(p) => (p.theme === "dark" ? "#555" : "#E0E0E0")};
   border-radius: 12px;
@@ -76,20 +76,11 @@ const Swatch = styled.button`
 `;
 
 const RandomButton = styled(Swatch)`
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96c93d);
-  background-size: 200% 200%;
-  animation: gradient 5s ease infinite;
+  background: conic-gradient(from 0deg at 50% 50%, #ff0000, #ff9900, #ffff00, #33cc33, #3399ff, #9933ff, #ff0000);
+  filter: blur(0.5px);
 
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+  &::after {
+    border-radius: 6px;
   }
 `;
 

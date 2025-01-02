@@ -51,7 +51,7 @@ export const sharedStyles = {
     border: "1px solid #444",
     color: "#eee",
     borderRadius: "10px",
-    width: "20em",
+    width: "40em !important",
     marginLeft: "0.5rem",
     outline: "none",
     "&:focus": {

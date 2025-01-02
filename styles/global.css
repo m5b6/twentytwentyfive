@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-size: 16px;
-  font-family: 'Space Mono', monospace !important;
+  font-family: "Space Mono", monospace !important;
 }
 
 html,
@@ -36,7 +36,6 @@ h1 {
   text-align: center;
 }
 
-
 .spin {
   transition: transform 0.3s ease-out;
 }
@@ -46,12 +45,15 @@ h1 {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-
-.textInput{
+.textInput {
   transition: all 0.15s ease-out;
 }
 .textInput:focus {
@@ -63,4 +65,7 @@ h1 {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+.habit-input-container {
+  margin-right: 0.5rem;
 }

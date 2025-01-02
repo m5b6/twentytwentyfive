@@ -5,14 +5,50 @@ import ColorPicker from "../components/ColorPicker";
 import HabitChip from "../components/HabitChip";
 import HabitInput from "../components/HabitInput";
 import SelectionRect from "../components/SelectionRect";
+import BackgroundPicker from "../components/BackgroundPicker";
 
 export default function Home() {
+  const [isMobile, setIsMobile] = useState(false);
   const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState("");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [chosenEmoji, setChosenEmoji] = useState("random");
   const [chosenColor, setChosenColor] = useState("auto");
+  const [backgroundColor, setBackgroundColor] = useState("#111");
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("habits");
+    if (saved) setHabits(JSON.parse(saved));
+    
+    const savedBg = localStorage.getItem("background-color");
+    if (savedBg) setBackgroundColor(savedBg);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.style.background = backgroundColor;
+    document.body.style.background = backgroundColor;
+    document.documentElement.style.transition = 'background 0.3s ease';
+    document.body.style.transition = 'background 0.3s ease';
+    
+    // Ensure the #__next div also has the background color
+    const nextElement = document.getElementById('__next');
+    if (nextElement) {
+      nextElement.style.background = backgroundColor;
+      nextElement.style.transition = 'background 0.3s ease';
+      nextElement.style.minHeight = '100vh';
+    }
+  }, [backgroundColor]);
+
   const getRandomPastelColor = () => {
     const hue = Math.floor(Math.random() * 360);
     const saturation = 50 + Math.random() * 20; // 50–70%
@@ -78,11 +114,6 @@ export default function Home() {
     "#e6e6fa",
   ];
 
-  useEffect(() => {
-    const saved = localStorage.getItem("habits");
-    if (saved) setHabits(JSON.parse(saved));
-  }, []);
-
   const saveHabits = (updated) => {
     setHabits(updated);
     localStorage.setItem("habits", JSON.stringify(updated));
@@ -131,10 +162,58 @@ export default function Home() {
     localStorage.removeItem(`habit-pos-${habitToDelete.name}`);
   };
 
+  if (isMobile) {
+    return (
+      <div style={{
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "2rem",
+        textAlign: "center",
+        background: backgroundColor,
+        color: "white",
+        fontFamily: "system-ui, -apple-system, sans-serif"
+      }}>
+        <div>
+          <h1 style={{ 
+            fontSize: "1.5rem", 
+            marginBottom: "1rem",
+            background: "conic-gradient(from 0deg at 50% 50%, #ff0000, #ff9900, #ffff00, #33cc33, #3399ff, #9933ff, #ff0000)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            filter: "blur(0.5px)"
+          }}>
+            ✨ twentytwentyfive
+          </h1>
+          <p style={{ 
+            fontSize: "1rem", 
+            lineHeight: "1.5",
+            color: "rgba(255,255,255,0.8)" 
+          }}>
+             currently only available on desktop 🖥️
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleBackgroundChange = (color) => {
+    setBackgroundColor(color);
+    localStorage.setItem("background-color", color);
+  };
+
   return (
-    <div style={sharedStyles.container} className="container">
+    <div style={{ 
+      ...sharedStyles.container,
+      background: 'transparent' // Make container transparent to show background
+    }} className="container">
       <style>{swirlAnimation}</style>
       <SelectionRect />
+      <BackgroundPicker
+        currentColor={backgroundColor}
+        onColorChange={handleBackgroundChange}
+      />
 
       {pickerOpen && (
         <EmojiPicker
