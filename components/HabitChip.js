@@ -166,6 +166,7 @@ export default function HabitChip({ habit, onIncrement, onRemove, onDelete }) {
             <span className="habit-name">{habit.name}</span>
             <span className="habit-count">
               <strong>{habit.count}</strong>
+              {habit.suffix && <span style={{ marginLeft: "4px", opacity: 0.7 }}>{habit.suffix}</span>}
             </span>
           </div>
           <button style={btnStyle(isBouncingPlus)} onClick={handleIncrement} className="habit-plus-btn">

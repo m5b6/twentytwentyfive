@@ -88,17 +88,21 @@ export default function Home() {
     localStorage.setItem("habits", JSON.stringify(updated));
   };
 
-  const addHabit = () => {
+  const addHabit = (suffix = "") => {
     if (!newHabit.trim()) return;
 
-    const habitEmoji =
-      chosenEmoji === "random" ? getRandomEmoji() : chosenEmoji;
-    const habitColor =
-      chosenColor === "auto" ? getRandomPastelColor() : chosenColor;
+    const habitEmoji = chosenEmoji === "random" ? getRandomEmoji() : chosenEmoji;
+    const habitColor = chosenColor === "auto" ? getRandomPastelColor() : chosenColor;
 
     saveHabits([
       ...habits,
-      { name: newHabit, count: 0, emoji: habitEmoji, color: habitColor },
+      { 
+        name: newHabit, 
+        count: 0, 
+        emoji: habitEmoji, 
+        color: habitColor,
+        suffix: suffix 
+      },
     ]);
 
     setNewHabit("");

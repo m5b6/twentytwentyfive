@@ -1,6 +1,7 @@
 import { sharedStyles } from "../styles";
 import { Tooltip } from "@mui/material";
 import { useState, useEffect } from "react";
+import SuffixPicker from "./SuffixPicker";
 
 export default function HabitInput({
   newHabit,
@@ -15,6 +16,7 @@ export default function HabitInput({
   const [showRectangleHint, setShowRectangleHint] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [isMac, setIsMac] = useState(false);
+  const [selectedSuffix, setSelectedSuffix] = useState("");
 
   useEffect(() => {
     const saved = localStorage.getItem("habits");
@@ -43,7 +45,8 @@ export default function HabitInput({
 
   const handleAddHabit = () => {
     if (!newHabit.trim()) return;
-    onAddHabit();
+    onAddHabit(selectedSuffix);
+    setSelectedSuffix("");
     setShowTitle(false);
     const savedRects = localStorage.getItem("selection-rects");
     const hasRects = savedRects && JSON.parse(savedRects).length > 0;
@@ -248,6 +251,11 @@ export default function HabitInput({
             value={newHabit}
             onChange={(e) => onHabitChange(e.target.value)}
             onKeyDown={handleKeyDown}
+          />
+
+          <SuffixPicker
+            selectedSuffix={selectedSuffix}
+            onSelect={setSelectedSuffix}
           />
 
           <Tooltip
