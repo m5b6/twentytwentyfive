@@ -57,30 +57,35 @@ export default function Home() {
   };
 
   const EMOJIS = [
-    "🏃",
-    "📚",
-    "✍️",
-    "🧘",
-    "💪",
-    "🎨",
-    "🎵",
-    "🌱",
-    "🧹",
-    "💧",
-    "🥗",
-    "😴",
-    "🚴",
-    "🧠",
-    "🎯",
-    "⌛",
-    "🤝",
-    "📝",
-    "🧘‍♀️",
-    "💻",
-    "🎮",
-    "🏊",
-    "🎪",
-    "💭",
+    // Exercise & Physical Activity
+    "🏃", "🏋️", "🧘", "🚴", "🏊", "💪", "🤸", "⛹️", "🤾", "🏌️", "🎾", "🏸", "🏓", "🥊", "🧗",
+    
+    // Mental & Learning
+    "📚", "✍️", "🧠", "💭", "📝", "💡", "🔍", "📖", "🎯", "🎲", "🧩", "🎨", "🎼", "🎸", "🎹",
+    
+    // Health & Wellness
+    "💊", "💆", "🧘‍♀️", "🥗", "💧", "😴", "🌱", "🥦", "🍎", "🥑", "⚕️", "🧘‍♂️", "🌿", "🥤", "☕️",
+    
+    // Productivity & Work
+    "💻", "📱", "✉️", "📞", "💼", "📊", "📈", "⌚️", "⏰", "📅", "✅", "📋", "💪", "🎯", "⭐️",
+    
+    // Home & Life
+    "🧹", "🧺", "🛁", "🛏️", "🪴", "🧼", "🧴", "🚿", "🧹", "📱", "🔋", "💰", "🏠", "🌅", "🌙",
+    
+    // Social & Communication
+    "🤝", "💬", "📞", "✉️", "🤗", "👥", "🗣️", "🫂", "📲", "🤔", "🎭", "🗪", "📢", "🤹", "🎪",
+    
+    // Mindfulness & Spirituality
+    "🧘‍♀️", "🕊️", "🙏", "⛪️", "🕌", "🕯️", "☮️", "☯️", "🧘‍♂️", "🌟", "✨", "🌈", "🌺", "🍃", "💫",
+    
+    // Hobbies & Skills
+    "🎨", "🎵", "📷", "🎮", "🎲", "🎭", "🎪", "🎯", "🎳", "🎱", "🎸", "🪁", "🎣", "🧶", "🎪",
+    
+    // Travel & Outdoors
+    "🏃‍♀️", "🚶", "🚴‍♀️", "🏕️", "⛺️", "🏖️", "🗺️", "🧭", "🌲", "🌊", "🏔️", "🌅", "🌄", "🌳", "🌿",
+    
+    // Personal Growth
+    "📈", "🎯", "💫", "🌱", "💪", "🧠", "📚", "💡", "🔑", "⭐️", "🌟", "✨", "🎓", "📊", "🏆"
   ];
 
   const getRandomEmoji = () => {
@@ -141,16 +146,16 @@ export default function Home() {
     setChosenColor("auto");
   };
 
-  const increment = (index) => {
+  const increment = (index, amount = 1) => {
     const updated = [...habits];
-    updated[index].count++;
+    updated[index].count += amount;
     saveHabits(updated);
   };
 
-  const decrement = (index) => {
+  const decrement = (index, amount = 1) => {
     const updated = [...habits];
-    if (updated[index].count > 0) {
-      updated[index].count--;
+    if (updated[index].count >= amount) {
+      updated[index].count -= amount;
       saveHabits(updated);
     }
   };
@@ -247,8 +252,8 @@ export default function Home() {
         <HabitChip
           key={i}
           habit={h}
-          onIncrement={() => increment(i)}
-          onRemove={() => decrement(i)}
+          onIncrement={(amount) => increment(i, amount)}
+          onRemove={(amount) => decrement(i, amount)}
           onDelete={deleteHabit}
         />
       ))}

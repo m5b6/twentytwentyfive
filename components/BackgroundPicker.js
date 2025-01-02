@@ -90,40 +90,40 @@ const Swatch = styled.button`
 `;
 
 const BACKGROUND_COLORS = [
-  // Classic darks
-  "#111111",
-  "#1a1a1a",
-  "#1e272e",
-  "#2d3436",
-  "#0d1b2a",
+  // Moody Darks
+  "#0B0014", // Deep void
+  "#1A0B1C", // Midnight aubergine
+  "#0D1321", // Stormy night
+  "#1D1135", // Dark mystic
+  "#0F1C23", // Deep ocean
 
-  // Moody blues and purples
-  "#1a1a2e",
-  "#191970",
-  "#2E0854",
-  "#1B1B3A",
-  "#2C1454",
+  // Quirky Darks
+  "#1F1B24", // Dark plum
+  "#1B1F3B", // Twilight navy
+  "#2D1B34", // Mysterious mauve
+  "#1C1E26", // Space gray
+  "#2B1C1C", // Dark chocolate
 
-  // Rich jewel tones
-  "#2D0922",
-  "#1D3E53",
-  "#2C3639",
-  "#2F4538",
-  "#2B0F0E",
+  // Rich Undertones
+  "#1E1B18", // Dark espresso
+  "#1C2541", // Deep denim
+  "#2C1810", // Burnt umber
+  "#1B2D2A", // Dark forest
+  "#251A1C", // Dark wine
 
-  // Quirky darks
-  "#1F2937",
-  "#251B37",
-  "#1B2430",
-  "#2C3333",
-  "#1A120B",
+  // Experimental
+  "#16161E", // Japanese indigo
+  "#1E2040", // Dark slate indigo
+  "#2B1D24", // Dark berry
+  "#1D2951", // Space cadet
+  "#1B1D23", // Dark gunmetal
 
-  // Experimental darks
-  "#0F172A",
-  "#1E1E1E",
-  "#242424",
-  "#292929",
-  "#2e2e2e"
+  // Cosmic Darks
+  "#0F0F1B", // Deep space
+  "#1A1B26", // Tokyo night
+  "#232136", // Rose pine
+  "#191724", // Dark rose
+  "#1E1E2E"  // Catppuccin mocha
 ];
 
 export default function BackgroundPicker({ currentColor, onColorChange }) {

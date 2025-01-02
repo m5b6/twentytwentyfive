@@ -57,7 +57,7 @@ h1 {
   transition: all 0.15s ease-out;
 }
 .textInput:focus {
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
 }
 
 ::placeholder {

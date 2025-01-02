@@ -38,7 +38,7 @@ export const sharedStyles = {
     alignItems: "center",
     justifyContent: "center",
     gap: "0.5rem",
-    background: "rgba(0,0,0,0.8)",
+    background: "rgba(0,0,0,0.5)",
     padding: "1rem",
     borderRadius: "15px",
     backdropFilter: "blur(10px)",
