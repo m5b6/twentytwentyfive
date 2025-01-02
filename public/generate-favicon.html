@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favicon Generator</title>
+</head>
+<body>
+    <p>Right-click on the canvas below and select "Save image as..." to save the favicon:</p>
+    <canvas id="faviconCanvas" width="32" height="32"></canvas>
+    <script>
+        const canvas = document.getElementById('faviconCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set background
+        ctx.fillStyle = '#111111';
+        ctx.fillRect(0, 0, 32, 32);
+
+        // Draw emoji
+        ctx.font = '24px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('✨', 16, 16);
+
+        // Style the canvas for better visibility
+        canvas.style.width = '128px';
+        canvas.style.height = '128px';
+        canvas.style.imageRendering = 'pixelated';
+        canvas.style.border = '1px solid black';
+    </script>
+</body>
+</html> 

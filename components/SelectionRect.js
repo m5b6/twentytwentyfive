@@ -144,13 +144,13 @@ export default function SelectionRect() {
   }, [handleMouseDown, handleMouseMove, handleMouseUp]);
 
   const rectStyle = {
-    border: "2px solid rgba(255, 255, 255, 0.8)",
+    border: "2px solid rgba(255, 255, 255, 0.2)",
     borderRadius: "12px",
-    background: "rgba(255, 255, 255, 0.15)",
-    backdropFilter: "blur(4px)",
-    WebkitBackdropFilter: "blur(4px)",
+    background: "rgba(255, 255, 255, 0.08)",
+    backdropFilter: "blur(2px)",
+    WebkitBackdropFilter: "blur(2px)",
     boxShadow:
-      "0 0 0 1px rgba(255, 255, 255, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.2)",
+      "0 0 0 1px rgba(255, 255, 255, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.1)",
   };
 
   return (
@@ -194,8 +194,8 @@ export default function SelectionRect() {
               data-index={index}
               style={{
                 height: '32px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
                 borderTopLeftRadius: '10px',
                 borderTopRightRadius: '10px',
                 display: 'flex',

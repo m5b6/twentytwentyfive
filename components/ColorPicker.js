@@ -4,11 +4,12 @@ import styled from "styled-components";
 const AnimatedContainer = styled.div`
   position: absolute;
   left: -6rem;
-  background: ${(p) => (p.theme === "dark" ? "#2A2A2A" : "#FFFFFF")};
-  border: 1px solid ${(p) => (p.theme === "dark" ? "#555" : "#E0E0E0")};
+  background: ${(p) => (p.theme === "dark" ? "rgba(42, 42, 42, 0.7)" : "rgba(255, 255, 255, 0.7)")};
+  border: 1px solid ${(p) => (p.theme === "dark" ? "rgba(85, 85, 85, 0.8)" : "rgba(224, 224, 224, 0.8)")};
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
   z-index: 998;
   min-width: 240px;
 

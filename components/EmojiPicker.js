@@ -7,11 +7,12 @@ import styled from "styled-components";
 const Container = styled.div`
   position: absolute;
   left: -6rem;
-  background: #222;
-  border: 1px solid #555;
+  background: rgba(34, 34, 34, 0.7);
+  border: 1px solid rgba(85, 85, 85, 0.8);
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  backdrop-filter: blur(4px);
   z-index: 999;
   opacity: ${props => props.isClosing ? 0 : (props.isVisible ? 1 : 0)};
   transform: ${props => props.isClosing 
